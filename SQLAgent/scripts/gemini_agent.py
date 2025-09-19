@@ -20,9 +20,11 @@ import re
 import sqlite3
 from setup_database import setup_database
 
-# Check if the database exists, if not, create it
-if not os.path.exists("C:/Users/user/OneDrive/Desktop/SQL agent by Hassan/task by hassan/week_10/SQLAgent/sql_agent_class.db"):
-    setup_database()
+DB_FILE_PATH = "C:/Users/user/OneDrive/Desktop/SQL agent by Hassan/task by hassan/week_10/SQLAgent/sql_agent_class.db"
+
+# Check if the database file exists at the specified absolute path.
+if not os.path.exists(DB_FILE_PATH):
+    setup_database() # If the database does not exist, call the setup_database function to create and populate it.
 import sqlalchemy
 from pydantic import BaseModel, Field
 from langchain.tools import BaseTool
@@ -41,7 +43,7 @@ import google.generativeai as genai
 load_dotenv()
 
 # Database Configuration
-DB_URL = "sqlite:///C:/Users/user/OneDrive/Desktop/SQL agent by Hassan/task by hassan/week_10/SQLAgent/sql_agent_class.db"
+DB_URL = f"sqlite:///{DB_FILE_PATH}"
 
 # Create Database Engine
 engine = sqlalchemy.create_engine(DB_URL)
