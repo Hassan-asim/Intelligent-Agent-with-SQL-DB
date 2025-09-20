@@ -18,13 +18,16 @@ Security Features Implemented:
 import os
 import re
 import sqlite3
+import pathlib
 from setup_database import setup_database
 
-DB_FILE_PATH = "C:/Users/user/OneDrive/Desktop/SQL agent by Hassan/task by hassan/week_10/SQLAgent/sql_agent_class.db"
+# Get the database path relative to the script location
+script_dir = pathlib.Path(__file__).parent
+project_root = script_dir.parent
+DB_FILE_PATH = project_root / "sql_agent_class.db"
 
 # Check if the database file exists at the specified absolute path.
-if not os.path.exists(DB_FILE_PATH):
-    setup_database() # If the database does not exist, call the setup_database function to create and populate it.
+setup_database() # Always call setup_database to ensure a fresh database with the correct schema.
 import sqlalchemy
 from pydantic import BaseModel, Field
 from langchain.tools import BaseTool
@@ -43,7 +46,7 @@ import google.generativeai as genai
 load_dotenv()
 
 # Database Configuration
-DB_URL = f"sqlite:///{DB_FILE_PATH}"
+DB_URL = f"sqlite:///{DB_FILE_PATH.as_posix()}"
 
 # Create Database Engine
 engine = sqlalchemy.create_engine(DB_URL)
@@ -96,7 +99,7 @@ def get_schema_context():
     """
     Get the database schema context.
     """
-    db = SQLDatabase.from_uri(DB_URL, include_tables=["instructors", "courses", "students", "classes"])
+    db = SQLDatabase.from_uri(DB_URL, include_tables=["customers","orders","order_items","products","refunds","payments","categories","inventory","customer_segments","promotions","order_promotions"])
     return db.get_table_info()
 
 def execute_query(query: str):

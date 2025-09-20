@@ -33,7 +33,7 @@ llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 # Parameters:
 #   - uri: SQLite database file path (creates file if it doesn't exist)
 # Returns: SQLDatabase object that handles connection management and query execution
-db = SQLDatabase.from_uri("sqlite:///SQLAgent/sql_agent_class.db")
+db = SQLDatabase.from_uri("sqlite:///sql_agent_class.db")
 
 # Create SQL Agent
 # create_sql_agent: Factory function that creates a complete SQL-capable agent

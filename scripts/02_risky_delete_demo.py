@@ -33,7 +33,7 @@ load_dotenv()
 # Database Configuration
 # DB_URL: SQLite database connection string
 # Note: This points to a local SQLite file in the current directory
-DB_URL = "sqlite:///SQLAgent/sql_agent_class.db"
+DB_URL = "sqlite:///sql_agent_class.db"
 
 # Create Database Engine
 # sqlalchemy.create_engine: Creates a database engine for connection management

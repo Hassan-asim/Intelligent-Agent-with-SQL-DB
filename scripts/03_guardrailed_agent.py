@@ -170,7 +170,7 @@ class SafeSQLTool(BaseTool):
 #   - DB_URL: Database connection string
 #   - include_tables: Explicitly list allowed tables for additional security
 # Returns: SQLDatabase object with schema inspection capabilities
-db = SQLDatabase.from_uri(DB_URL, include_tables=["customers","orders","order_items","products","refunds","payments"])
+db = SQLDatabase.from_uri(DB_URL, include_tables=["customers","orders","order_items","products","refunds","payments","categories","inventory","customer_segments","promotions","order_promotions"])
 
 # Extract Database Schema Information
 # get_table_info(): Returns formatted string containing table schemas
