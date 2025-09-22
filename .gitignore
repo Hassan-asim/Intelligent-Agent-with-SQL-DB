@@ -48,9 +48,10 @@ ehthumbs.db
 Thumbs.db
 
 # Database files
-*.db
-*.sqlite
-*.sqlite3
+# *.db
+# *.sqlite
+# *.sqlite3
+!school_management.db
 
 # Logs
 *.log
