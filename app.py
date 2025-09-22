@@ -383,18 +383,45 @@ def create_chart(df, query):
     fig, ax = plt.subplots()
     query_lower = query.lower()
 
+    # Ensure the column used for values is numeric
+    # For pie and bar charts, the second column is typically the value
+    # For line charts, both columns might need to be numeric or datetime
+    
+    # Attempt to convert the second column to numeric, coercing errors
+    if len(df.columns) > 1:
+        df[df.columns[1]] = pd.to_numeric(df[df.columns[1]], errors='coerce')
+        # Drop rows where the value column became NaN after coercion
+        df.dropna(subset=[df.columns[1]], inplace=True)
+
+    # Add a check here to see if the DataFrame is empty after cleaning
+    if df.empty:
+        st.warning("No valid data to create a chart after cleaning.")
+        plt.close(fig) # Close the figure to prevent it from being displayed
+        return None # Return None if no chart can be created
+
     if 'pie' in query_lower:
-        df.set_index(df.columns[0])[df.columns[1]].plot(kind='pie', ax=ax, autopct='%1.1f%%')
+        if len(df.columns) > 1 and pd.api.types.is_numeric_dtype(df[df.columns[1]]):
+            df.set_index(df.columns[0])[df.columns[1]].plot(kind='pie', ax=ax, autopct='%1.1f%%')
+        else:
+            st.warning("Cannot create pie chart: Second column is not numeric or data is insufficient.")
     elif 'bar' in query_lower:
-        df.plot(kind='bar', x=df.columns[0], y=df.columns[1], ax=ax)
-    elif 'line' in query_lower:
-        df.plot(kind='line', x=df.columns[0], y=df.columns[1], ax=ax)
-    else:
-        # Auto-detect chart type
-        if pd.api.types.is_numeric_dtype(df[df.columns[1]]):
+        if len(df.columns) > 1 and pd.api.types.is_numeric_dtype(df[df.columns[1]]):
             df.plot(kind='bar', x=df.columns[0], y=df.columns[1], ax=ax)
         else:
+            st.warning("Cannot create bar chart: Second column is not numeric or data is insufficient.")
+    elif 'line' in query_lower:
+        if len(df.columns) > 1 and pd.api.types.is_numeric_dtype(df[df.columns[1]]):
+            df.plot(kind='line', x=df.columns[0], y=df.columns[1], ax=ax)
+        else:
+            st.warning("Cannot create line chart: Second column is not numeric or data is insufficient.")
+    else:
+        # Auto-detect chart type
+        if len(df.columns) > 1 and pd.api.types.is_numeric_dtype(df[df.columns[1]]):
+            df.plot(kind='bar', x=df.columns[0], y=df.columns[1], ax=ax)
+        elif len(df.columns) > 1: # Fallback to pie if not numeric but still has two columns
             df.set_index(df.columns[0])[df.columns[1]].plot(kind='pie', ax=ax, autopct='%1.1f%%')
+        else:
+            st.warning("Cannot auto-detect chart type: Data is insufficient.")
 
     plt.tight_layout()
     return fig
