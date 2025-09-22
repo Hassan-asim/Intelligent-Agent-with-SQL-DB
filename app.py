@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import google.generativeai as genai
-from dotenv import load_dotenv
 import requests
 import json
 import hashlib
@@ -23,16 +22,11 @@ from datetime import datetime
 import json
 import streamlit as st
 
-# Load environment variables for API keys
-load_dotenv()
-
 # ============================================================================
 # DATABASE CONFIGURATION
 # ============================================================================
 # Fixed directory structure - database is in the project root
-SCRIPT_DIR = pathlib.Path(__file__).parent
-DB_FILE_PATH = SCRIPT_DIR / "school_management.db"
-DB_URL = f"sqlite:///{DB_FILE_PATH.as_posix()}"
+DB_URL = st.secrets["DATABASE_URL"]
 
 # Create database engine for SQL operations
 engine = sqlalchemy.create_engine(DB_URL)
@@ -54,8 +48,8 @@ class SecurityManager:
     
     def __init__(self):
         # Load credentials from environment variables
-        self.admin_email = "hassanasim337@gmail.com"
-        admin_password = "12345678"
+        self.admin_email = st.secrets["ADMIN_EMAIL"]
+        admin_password = st.secrets["ADMIN_PASSWORD"]
         self.admin_password_hash = self._hash_password(admin_password)
         if 'is_authenticated' not in st.session_state:
             st.session_state.is_authenticated = False
@@ -184,9 +178,9 @@ def handle_chart_of_that_request(query):
 # ============================================================================
 
 def main():
-    st.set_page_config(page_title="School Management Chat Assistant", page_icon="🎓", layout="wide")
+    st.set_page_config(page_title=st.secrets["APP_TITLE"], page_icon="🎓", layout="wide")
 
-    st.title("🎓 School Management Chat Assistant")
+    st.title(st.secrets["APP_TITLE"])
 
     # Initialize security manager
     security_manager = SecurityManager()
@@ -285,7 +279,7 @@ User Query: {query}
 
 SQL Query:'''
 
-        gemini_api_key = os.getenv("GEMINI_API_KEY")
+        gemini_api_key = st.secrets["GEMINI_API_KEY"]
         if not gemini_api_key:
             raise ValueError("GEMINI_API_KEY not found in environment variables.")
 
