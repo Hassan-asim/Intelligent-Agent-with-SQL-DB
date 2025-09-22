@@ -2067,7 +2067,7 @@ def main():
         root.protocol("WM_DELETE_WINDOW", on_closing)
         
         # Start the GUI event loop
-        print("🎓 School Management Chat Assistant - Material Design")
+        print(" School Management Chat Assistant - Material Design")
         print("=" * 60)
         print("Features:")
         print("• Modern Material Design UI")
@@ -2078,10 +2078,16 @@ def main():
         print("=" * 60)
         print("Starting application...")
         
-        root.mainloop()
+        while True:
+            try:
+                root.mainloop()
+                break
+            except KeyboardInterrupt:
+                on_closing()
+                break
         
     except Exception as e:
-        print(f"❌ Failed to start application: {e}")
+        print(f" Failed to start application: {e}")
         print("Please check your environment setup and try again.")
         return 1
     
@@ -2107,29 +2113,29 @@ if __name__ == "__main__":
     APP_VERSION = os.getenv("APP_VERSION", "2.0.0")
     APP_DESCRIPTION = "Material Design School Management System with AI-Powered Analytics"
     
-    print(f"\n🚀 {APP_NAME} v{APP_VERSION}")
-    print(f"📝 {APP_DESCRIPTION}")
+    print(f"\n {APP_NAME} v{APP_VERSION}")
+    print(f" {APP_DESCRIPTION}")
     print("=" * 80)
     
     # Check environment setup
-    print("🔍 Checking environment setup...")
+    print(" Checking environment setup...")
     
     # Verify database exists
     if not DB_FILE_PATH.exists():
-        print(f"❌ Database not found at: {DB_FILE_PATH}")
+        print(f" Database not found at: {DB_FILE_PATH}")
         print("Please run setup_school_database.py first to create the database.")
         exit(1)
     else:
-        print(f"✅ Database found: {DB_FILE_PATH}")
+        print(f" Database found: {DB_FILE_PATH}")
     
     # Check for required environment variables
     if not os.getenv("GEMINI_API_KEY"):
-        print("❌ GEMINI_API_KEY not found in environment variables")
+        print(" GEMINI_API_KEY not found in environment variables")
         print("Please create a .env file with your Gemini API key:")
         print("GEMINI_API_KEY=your_api_key_here")
         exit(1)
     else:
-        print("✅ Gemini API key found")
+        print(" Gemini API key found")
     
     # Check required Python packages
     required_packages = [
@@ -2146,23 +2152,23 @@ if __name__ == "__main__":
             missing_packages.append(package)
     
     if missing_packages:
-        print(f"❌ Missing required packages: {', '.join(missing_packages)}")
+        print(f" Missing required packages: {', '.join(missing_packages)}")
         print("Please install them using: pip install -r requirements.txt")
         exit(1)
     else:
-        print("✅ All required packages available")
+        print(" All required packages available")
     
     print("=" * 80)
-    print("🎯 Starting application...")
+    print(" Starting application...")
     print("=" * 80)
     
     # Start the application
     exit_code = main()
     
     if exit_code == 0:
-        print("\n✅ Application closed successfully")
+        print("\n Application closed successfully")
     else:
-        print(f"\n❌ Application exited with error code: {exit_code}")
+        print(f"\n Application exited with error code: {exit_code}")
     
     print("=" * 80)
     print("Thank you for using the School Management Chat Assistant!")
